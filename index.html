@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title id="pageTitle">Album Foto</title>
+  <meta name="description" id="pageMeta" content="Album foto kenangan yang indah">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ══ LOADING SCREEN ══ -->
+<div class="boot" id="boot">
+  <div class="boot-logo">
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="4" width="32" height="32" rx="8" stroke="currentColor" stroke-width="1.5"/>
+      <circle cx="14" cy="15" r="3" fill="currentColor" opacity="0.6"/>
+      <path d="M4 26l9-9 7 7 5-5 11 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div class="boot-brand" id="bootBrand">Album Foto</div>
+  <div class="boot-spin"></div>
+  <div class="boot-sub" id="bootSub">Memuat koleksi foto…</div>
+</div>
+
+<!-- ══ ERROR SCREEN ══ -->
+<div class="msg" id="errScreen">
+  <div class="msg-ico">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="12" y1="8" x2="12" y2="12"/>
+      <circle cx="12" cy="16" r="0.5" fill="currentColor"/>
+    </svg>
+  </div>
+  <div class="msg-title" id="errTitle">Gagal Memuat</div>
+  <div class="msg-sub" id="errSub">Periksa koneksi internet dan konfigurasi API Key / Folder ID di file config.js</div>
+  <button class="msg-btn" onclick="location.reload()">Coba Lagi</button>
+</div>
+
+<!-- ══ ISI UTAMA ══ -->
+<div id="app" style="display:none">
+
+  <!-- SAMPUL HERO -->
+  <header class="cover" id="cover">
+    <div class="cover-bg" id="coverBg"></div>
+    <img class="cover-img" id="coverImg" src="" alt="" loading="eager">
+    <div class="cover-veil"></div>
+    <div class="cover-tag" id="coverTag">
+      <div class="cover-eyebrow" id="coverEyebrow"></div>
+      <div class="cover-name" id="coverName"></div>
+      <div class="cover-meta" id="coverMeta"></div>
+    </div>
+    <div class="cover-cue" id="coverCue">
+      <span>Jelajahi Album</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </div>
+    <!-- Scroll indicator bar -->
+    <div class="scroll-bar" id="scrollBar"></div>
+  </header>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <div class="nav-brand" id="navBrand"></div>
+      <div class="nav-tabs" id="navTabs"></div>
+      <div class="nav-actions">
+        <button class="icon-btn" id="themeBtn" aria-label="Ganti tema" title="Ganti Tema">
+          <svg class="icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+          <svg class="icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+        </button>
+        <button class="icon-btn" id="shareBtn" aria-label="Bagikan" title="Bagikan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+            <line x1="8.6" y1="10.5" x2="15.4" y2="6.5"/>
+            <line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/>
+          </svg>
+        </button>
+        <button class="icon-btn" id="moreBtn" aria-label="Lebih banyak" title="Lebih Banyak" onclick="toggleMenu(event)">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/>
+          </svg>
+        </button>
+        <!-- Dropdown menu -->
+        <div class="dropdown-menu" id="dropMenu">
+          <div class="dm-item" onclick="downloadAlbum()">
+            <span class="dm-ic">⬇</span> Download Album (Drive)
+          </div>
+          <div class="dm-item" onclick="copyLink()">
+            <span class="dm-ic">🔗</span> Salin Link
+          </div>
+          <div class="dm-item" onclick="showQR()">
+            <span class="dm-ic">📱</span> QR Code
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HALAMAN JUDUL -->
+  <section class="title-page">
+    <p class="tp-eyebrow" id="tpEyebrow"></p>
+    <h1 class="tp-name" id="tpName"></h1>
+    <div class="tp-rule">
+      <span class="tp-rule-gem">◆</span>
+    </div>
+    <p class="tp-meta" id="tpMeta"></p>
+    <p class="tp-story" id="tpStory"></p>
+  </section>
+
+  <!-- GALERI -->
+  <main class="gallery" id="gallery">
+    <!-- Stats bar -->
+    <div class="gallery-stats" id="galleryStats"></div>
+    <!-- Masonry grid -->
+    <div class="masonry" id="masonry"></div>
+    <!-- Load more -->
+    <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
+      <button class="load-more-btn" id="loadMoreBtn" onclick="loadMore()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+        Muat Lebih Banyak
+      </button>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="foot">
+    <div class="foot-inner">
+      <div class="foot-brand" id="footBrand"></div>
+      <div class="foot-copy">
+        Dibuat dengan <span class="heart">♥</span> untuk mengabadikan kenangan
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ══ LIGHTBOX FULLSCREEN ══ -->
+<div class="lb" id="lb">
+  <div class="lb-bg" id="lbBg"></div>
+  <div class="lb-stage" id="lbStage">
+    <div class="lb-wrap" id="lbWrap">
+      <img class="lb-img" id="lbImg" alt="" draggable="false">
+    </div>
+  </div>
+  <!-- Top bar -->
+  <div class="lb-bar lb-top">
+    <span class="lb-count" id="lbCount"></span>
+    <div class="lb-tools">
+      <button class="lb-ico" id="lbShare" aria-label="Bagikan" onclick="lbShareFn()" title="Bagikan Foto">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+          <line x1="8.6" y1="10.5" x2="15.4" y2="6.5"/>
+          <line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/>
+        </svg>
+      </button>
+      <button class="lb-ico" id="lbDl" aria-label="Unduh" title="Unduh Foto">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+      </button>
+      <button class="lb-ico" id="lbX" aria-label="Tutup" title="Tutup (Esc)" onclick="lbClose()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <!-- Prev / Next -->
+  <button class="lb-nav lb-prev" id="lbPrev" aria-label="Sebelumnya">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="15 18 9 12 15 6"/>
+    </svg>
+  </button>
+  <button class="lb-nav lb-next" id="lbNext" aria-label="Berikutnya">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="9 18 15 12 9 6"/>
+    </svg>
+  </button>
+  <!-- Hint -->
+  <div class="lb-hint">Geser untuk berpindah &middot; Cubit untuk perbesar</div>
+  <!-- Caption bar -->
+  <div class="lb-caption" id="lbCaption"></div>
+  <!-- Filmstrip -->
+  <div class="lb-film" id="lbFilm"></div>
+</div>
+
+<!-- ══ MODAL QR ══ -->
+<div class="modal-overlay" id="qrModal" onclick="if(event.target===this)closeModal('qrModal')">
+  <div class="modal-sheet">
+    <div class="modal-title">QR Code Album</div>
+    <div class="modal-sub">Scan untuk membuka galeri ini di perangkat lain.</div>
+    <div class="qr-wrap">
+      <canvas id="qrCanvas"></canvas>
+    </div>
+    <button class="modal-gold-btn" onclick="downloadQR()">⬇ Download PNG</button>
+    <button class="modal-cancel" onclick="closeModal('qrModal')">Tutup</button>
+  </div>
+</div>
+
+<!-- ══ TOAST ══ -->
+<div class="toast" id="toast"></div>
+
+<!-- Scripts -->
+<script src="config.js"></script>
+<script src="qrcode.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

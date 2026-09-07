@@ -360,6 +360,7 @@ code {
 /* ── Utility ───────────────────────────────────────────────── */
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
 .flex    { display: flex; }
 .flex-center { display: flex; align-items: center; justify-content: center; }
 .flex-between { display: flex; align-items: center; justify-content: space-between; }
@@ -395,11 +396,12 @@ code {
 /* ── Masonry Photo Grid ────────────────────────────────────── */
 .masonry {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 8px;
-  padding: 16px;
+  padding: 8px;
 }
-@media (min-width: 640px)  { .masonry { grid-template-columns: repeat(3, 1fr); gap: 10px; } }
+@media (min-width: 480px)  { .masonry { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); padding: 12px; } }
+@media (min-width: 640px)  { .masonry { grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 16px; } }
 @media (min-width: 1024px) { .masonry { grid-template-columns: repeat(4, 1fr); gap: 12px; } }
 @media (min-width: 1280px) { .masonry { grid-template-columns: repeat(5, 1fr); gap: 12px; } }
 
@@ -478,6 +480,24 @@ code {
   background: rgba(0,0,0,0.35);
 }
 .photo-card.selected .photo-overlay { background: rgba(232,200,122,0.06); }
+
+/* Make overlay select button always visible on touch devices */
+@media (hover: none) {
+  .photo-overlay {
+    opacity: 1;
+    background: transparent;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 8px;
+  }
+  .photo-overlay > div > button:first-child {
+    display: none; /* Hide zoom button since tapping photo will zoom */
+  }
+  .photo-overlay > div {
+    background: rgba(0,0,0,0.4);
+    border-radius: 8px;
+  }
+}
 
 /* ── Countdown Timer ───────────────────────────────────────── */
 .countdown {
@@ -560,13 +580,43 @@ code {
   transition: width 0.3s ease;
 }
 
+.admin-main { padding: 32px 24px; }
+
 /* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
 @media (max-width: 640px) {
+  .admin-main { padding: 20px 16px; }
   .grid-2 { grid-template-columns: 1fr; }
   .grid-3 { grid-template-columns: 1fr; }
-  .modal  { padding: 20px; }
+  .stats-grid { grid-template-columns: 1fr; gap: 12px; }
+  .modal  { padding: 20px; border-radius: var(--radius); }
+  .modal-actions { flex-direction: column; }
+  .modal-actions .btn { width: 100%; justify-content: center; }
   .table-wrap { font-size: 0.8rem; }
   .table th, .table td { padding: 10px 12px; }
+  .selection-bar {
+    padding: 12px 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .sel-progress {
+    order: 3;
+    flex-basis: 100%;
+  }
+  .album-hero-content {
+    padding: 40px 24px;
+  }
+  .album-title {
+    font-size: clamp(2.4rem, 12vw, 3.5rem);
+  }
+  .album-section {
+    padding: 40px 16px;
+  }
+  .admin-header-title { font-size: 1.1rem !important; }
+  .admin-logo { height: 36px !important; }
+  .admin-header-nav { padding: 0 16px !important; }
 }
 
 /* ══════════════════════════════════════════════════════════════

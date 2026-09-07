@@ -564,8 +564,8 @@ export default function AdminDashboard() {
         backdropFilter: 'blur(16px)',
         position: 'sticky', top: 0, zIndex: 50,
       }}>
-        <div style={{
-          maxWidth: 1200, margin: '0 auto',
+        <div className="admin-header-nav" style={{
+          maxWidth: 1780, margin: '0 auto',
           padding: '0 24px',
           height: 64,
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -574,10 +574,11 @@ export default function AdminDashboard() {
             <img 
               src={logo} 
               alt="Khansa Project" 
+              className="admin-logo"
               style={{ height: 48, objectFit: 'contain' }} 
             />
             <div>
-              <div style={{ fontWeight: 700, fontSize: '1.25rem' }}>Khansa Project</div>
+              <div className="admin-header-title" style={{ fontWeight: 700, fontSize: '1.25rem' }}>Khansa Project</div>
               <div className="text-xs text-dim">Admin Dashboard</div>
             </div>
           </div>
@@ -587,6 +588,17 @@ export default function AdminDashboard() {
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <polyline points="23 4 23 10 17 10"/>
                 <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+              </svg>
+            </button>
+            <button
+              className="btn-icon"
+              onClick={() => nav('/settings/password')}
+              title="Ganti Password"
+              style={{ color: 'var(--gold)' }}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="11" width="18" height="11" rx="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
               </svg>
             </button>
             <button className="btn btn-ghost btn-sm" onClick={logout}>
@@ -602,13 +614,10 @@ export default function AdminDashboard() {
       </header>
 
       {/* Content */}
-      <main style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px' }}>
+      <main className="admin-main" style={{ maxWidth: 1780, margin: '0 auto' }}>
 
         {/* Stats */}
-        <div className="grid-3" style={{
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: 16, marginBottom: 32,
-        }}>
+        <div className="stats-grid">
           <StatCard icon="📋" label="Total Sesi"    value={total}   color="200,200,220" />
           <StatCard icon="✅" label="Selesai"        value={selesai} color="74,222,128" />
           <StatCard icon="⏳" label="Aktif"          value={aktif}   color="96,165,250" />

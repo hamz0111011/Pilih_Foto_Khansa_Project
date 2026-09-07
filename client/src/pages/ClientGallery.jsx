@@ -354,6 +354,7 @@ function PhotoCard({ photo, isSelected, selectionOrder, onToggle, onZoom, disabl
     <div
       className={`photo-card${isSelected ? ' selected' : ''}`}
       style={{ cursor: 'pointer' }}
+      onClick={() => onZoom()}
     >
       {/* Skeleton */}
       {status !== 'loaded' && status !== 'error' && (
